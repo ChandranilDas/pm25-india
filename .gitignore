@@ -1,0 +1,5 @@
+# data and the saved model are too big for git
+data/
+results/step4/random_forest.joblib
+__pycache__/
+.DS_Store
