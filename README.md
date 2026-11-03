@@ -36,6 +36,7 @@ first project (60 monthly files). Each step saves its tables and figures in
 | `step5_evaluate.py` | scores (overall, by region, by season) and feature importance |
 | `step6_maps.py` | 0.25° maps: bilinear interpolation vs random forest |
 | `docs/steps/` | one document per step, the journal and a glossary |
+| `results/presentation/` | slides (14, with speaker notes) as PowerPoint and Keynote files |
 
 ## Main results (test grid cells, daily PM2.5)
 

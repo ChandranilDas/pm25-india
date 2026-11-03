@@ -14,5 +14,6 @@ Dated timeline of the work, newest at the bottom. Decisions are in **bold**.
 | Step 5: random forest R² 0.74, IDW 0.68, linear 0.45 at test cells. IDW fails in the northeast (−0.74). AOD most important. | step5_evaluate.py |
 | Step 6: 0.25° maps for 2024-11-15 and the 2024 average. Fixed a problem with `interp` and the text variable `region`. 2024 India means: CAMS 72.8, bilinear 72.4, random forest 71.5 µg/m³. | step6_maps.py |
 | README with results and short answers to the 6 research questions. | README.md |
+| **User request: slides.** 14 slides (questions, data, workflow, split, methods, results overall / by region / by season, importance, maps, limitations, conclusions), editable charts, speaker notes. Built with python-pptx (outside the project); notes added in Keynote, then saved as .key and exported to .pptx, because Keynote rejects notes written by python-pptx. Checked every slide as a rendered image. | results/presentation/ |
 
 **Still open:** nothing. Ready for review.
