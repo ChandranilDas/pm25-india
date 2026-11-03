@@ -37,6 +37,7 @@ first project (60 monthly files). Each step saves its tables and figures in
 | `step6_maps.py` | 0.25° maps: bilinear interpolation vs random forest |
 | `docs/steps/` | one document per step, the journal and a glossary |
 | `results/presentation/` | slides (14, with speaker notes) as PowerPoint and Keynote files |
+| `docs/presentation_guide.md` | slide-by-slide guide: key points, idea, why each step, what to say, likely questions (Word copy in `results/presentation/`) |
 
 ## Main results (test grid cells, daily PM2.5)
 

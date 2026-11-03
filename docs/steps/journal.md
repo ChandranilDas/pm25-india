@@ -15,5 +15,6 @@ Dated timeline of the work, newest at the bottom. Decisions are in **bold**.
 | Step 6: 0.25° maps for 2024-11-15 and the 2024 average. Fixed a problem with `interp` and the text variable `region`. 2024 India means: CAMS 72.8, bilinear 72.4, random forest 71.5 µg/m³. | step6_maps.py |
 | README with results and short answers to the 6 research questions. | README.md |
 | **User request: slides.** 14 slides (questions, data, workflow, split, methods, results overall / by region / by season, importance, maps, limitations, conclusions), editable charts, speaker notes. Built with python-pptx (outside the project); notes added in Keynote, then saved as .key and exported to .pptx, because Keynote rejects notes written by python-pptx. Checked every slide as a rendered image. | results/presentation/ |
+| **User request: presentation guide.** For each slide: key points, the idea in plain words, why we took the step, what to say, likely questions; plus a question-round cheat sheet. Word copy made with pandoc. | docs/presentation_guide.md |
 
 **Still open:** nothing. Ready for review.
