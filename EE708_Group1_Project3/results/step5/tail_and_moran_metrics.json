@@ -1,0 +1,80 @@
+{
+  "Linear Regression": {
+    "overall_r2": 0.4605,
+    "overall_rmse": 46.12,
+    "overall_mae": 31.15,
+    "overall_bias": -11.68,
+    "tail_rmse": 106.21,
+    "tail_mae": 83.51,
+    "tail_bias": -77.91,
+    "severe_precision": 0.665,
+    "severe_recall": 0.368,
+    "severe_f1": 0.474,
+    "morans_i": 0.6052
+  },
+  "Random Forest": {
+    "overall_r2": 0.7421,
+    "overall_rmse": 31.89,
+    "overall_mae": 17.83,
+    "overall_bias": -5.55,
+    "tail_rmse": 79.55,
+    "tail_mae": 58.39,
+    "tail_bias": -28.86,
+    "severe_precision": 0.81,
+    "severe_recall": 0.664,
+    "severe_f1": 0.73,
+    "morans_i": 0.4374
+  },
+  "HistGradientBoosting": {
+    "overall_r2": 0.7541,
+    "overall_rmse": 31.14,
+    "overall_mae": 17.55,
+    "overall_bias": -4.96,
+    "tail_rmse": 77.85,
+    "tail_mae": 55.1,
+    "tail_bias": -31.49,
+    "severe_precision": 0.806,
+    "severe_recall": 0.693,
+    "severe_f1": 0.745,
+    "morans_i": 0.3288
+  },
+  "AdvectSR-PM (PIML)": {
+    "overall_r2": 0.7765,
+    "overall_rmse": 29.68,
+    "overall_mae": 16.56,
+    "overall_bias": -3.62,
+    "tail_rmse": 74.07,
+    "tail_mae": 51.02,
+    "tail_bias": -26.44,
+    "severe_precision": 0.81,
+    "severe_recall": 0.727,
+    "severe_f1": 0.766,
+    "morans_i": 0.2944
+  },
+  "ResTabNet (Deep Tabular)": {
+    "overall_r2": 0.8274,
+    "overall_rmse": 26.09,
+    "overall_mae": 14.85,
+    "overall_bias": -5.21,
+    "tail_rmse": 63.31,
+    "tail_mae": 43.36,
+    "tail_bias": -22.09,
+    "severe_precision": 0.839,
+    "severe_recall": 0.77,
+    "severe_f1": 0.803,
+    "morans_i": 0.284
+  },
+  "Advect-ResTabNet (Hybrid)": {
+    "overall_r2": 0.8253,
+    "overall_rmse": 26.25,
+    "overall_mae": 14.7,
+    "overall_bias": -4.81,
+    "tail_rmse": 64.66,
+    "tail_mae": 43.89,
+    "tail_bias": -23.18,
+    "severe_precision": 0.838,
+    "severe_recall": 0.769,
+    "severe_f1": 0.802,
+    "morans_i": 0.2922
+  }
+}

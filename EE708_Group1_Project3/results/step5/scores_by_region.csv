@@ -1,0 +1,7 @@
+region_key,region_name,idw_r2,linear_r2,rf_r2,restabnet_r2,hgb_r2,advectsr_r2,advectsr_rmse
+igp,IGP,0.556,0.286,0.538,0.7236,0.5652,0.6012,54.764
+northwest,Northwest,0.805,-0.049,0.748,0.7681,0.727,0.7646,25.917
+central,Central,0.696,0.436,0.752,0.7804,0.7283,0.746,18.874
+south,South,0.451,-1.797,0.474,0.6642,0.5665,0.6339,15.716
+northeast,Northeast,-0.74,0.149,0.738,0.7938,0.7888,0.7941,20.206
+himalaya,Himalaya,0.457,0.493,0.784,0.8437,0.8201,0.8591,17.477

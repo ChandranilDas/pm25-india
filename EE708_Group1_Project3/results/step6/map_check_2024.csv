@@ -1,0 +1,5 @@
+,µg/m³
+CAMS 0.75° mean,72.8
+Bilinear 0.25° mean,72.37
+Random forest 0.25° mean,71.54
+Mean absolute difference RF vs bilinear,5.41

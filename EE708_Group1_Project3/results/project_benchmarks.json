@@ -1,0 +1,341 @@
+{
+  "overall": [
+    {
+      "method": "IDW (Spatial Baseline)",
+      "r2": 0.683,
+      "rmse": 35.34,
+      "mae": 20.432,
+      "bias": -6.751,
+      "color": "#64748b"
+    },
+    {
+      "method": "Linear Regression",
+      "r2": 0.446,
+      "rmse": 46.721,
+      "mae": 32.139,
+      "bias": -12.877,
+      "color": "#94a3b8"
+    },
+    {
+      "method": "Random Forest (100 Trees)",
+      "r2": 0.742,
+      "rmse": 31.888,
+      "mae": 17.819,
+      "bias": -5.584,
+      "color": "#f97316"
+    },
+    {
+      "method": "HistGradientBoosting (HGB)",
+      "r2": 0.7541,
+      "rmse": 31.14,
+      "mae": 17.56,
+      "bias": -5.0,
+      "color": "#38bdf8"
+    },
+    {
+      "method": "ResTabNet (Proposed Neural)",
+      "r2": 0.8274,
+      "rmse": 26.09,
+      "mae": 15.21,
+      "bias": -1.82,
+      "color": "#10b981"
+    },
+    {
+      "method": "AdvectSR-PM (Physics-Informed ML)",
+      "r2": 0.7765,
+      "rmse": 29.686,
+      "mae": 16.566,
+      "bias": -3.663,
+      "cce": 0.0,
+      "color": "#a855f7"
+    },
+    {
+      "method": "Advect-ResTabNet (Hybrid PIML+Deep)",
+      "r2": 0.8253,
+      "rmse": 26.25,
+      "mae": 14.92,
+      "bias": -3.12,
+      "cce": 0.0,
+      "color": "#06b6d4"
+    }
+  ],
+  "regional": [
+    {
+      "region_key": "igp",
+      "region_name": "IGP",
+      "idw_r2": 0.556,
+      "linear_r2": 0.286,
+      "rf_r2": 0.538,
+      "restabnet_r2": 0.7236,
+      "hgb_r2": 0.5652,
+      "advectsr_r2": 0.6012,
+      "advectsr_rmse": 54.764
+    },
+    {
+      "region_key": "northwest",
+      "region_name": "Northwest",
+      "idw_r2": 0.805,
+      "linear_r2": -0.049,
+      "rf_r2": 0.748,
+      "restabnet_r2": 0.7681,
+      "hgb_r2": 0.727,
+      "advectsr_r2": 0.7646,
+      "advectsr_rmse": 25.917
+    },
+    {
+      "region_key": "central",
+      "region_name": "Central",
+      "idw_r2": 0.696,
+      "linear_r2": 0.436,
+      "rf_r2": 0.752,
+      "restabnet_r2": 0.7804,
+      "hgb_r2": 0.7283,
+      "advectsr_r2": 0.746,
+      "advectsr_rmse": 18.874
+    },
+    {
+      "region_key": "south",
+      "region_name": "South",
+      "idw_r2": 0.451,
+      "linear_r2": -1.797,
+      "rf_r2": 0.474,
+      "restabnet_r2": 0.6642,
+      "hgb_r2": 0.5665,
+      "advectsr_r2": 0.6339,
+      "advectsr_rmse": 15.716
+    },
+    {
+      "region_key": "northeast",
+      "region_name": "Northeast",
+      "idw_r2": -0.74,
+      "linear_r2": 0.149,
+      "rf_r2": 0.738,
+      "restabnet_r2": 0.7938,
+      "hgb_r2": 0.7888,
+      "advectsr_r2": 0.7941,
+      "advectsr_rmse": 20.206
+    },
+    {
+      "region_key": "himalaya",
+      "region_name": "Himalaya",
+      "idw_r2": 0.457,
+      "linear_r2": 0.493,
+      "rf_r2": 0.784,
+      "restabnet_r2": 0.8437,
+      "hgb_r2": 0.8201,
+      "advectsr_r2": 0.8591,
+      "advectsr_rmse": 17.477
+    }
+  ],
+  "seasonal": [
+    {
+      "season_key": "winter",
+      "season_name": "Winter",
+      "idw_r2": 0.61,
+      "linear_r2": 0.368,
+      "rf_r2": 0.69,
+      "restabnet_r2": 0.792,
+      "hgb_r2": 0.7056,
+      "advectsr_r2": 0.7389,
+      "advectsr_rmse": 37.914
+    },
+    {
+      "season_key": "pre_monsoon",
+      "season_name": "Pre-monsoon",
+      "idw_r2": 0.536,
+      "linear_r2": 0.197,
+      "rf_r2": 0.6,
+      "restabnet_r2": 0.735,
+      "hgb_r2": 0.6031,
+      "advectsr_r2": 0.6231,
+      "advectsr_rmse": 28.54
+    },
+    {
+      "season_key": "monsoon",
+      "season_name": "Monsoon",
+      "idw_r2": 0.785,
+      "linear_r2": 0.355,
+      "rf_r2": 0.805,
+      "restabnet_r2": 0.865,
+      "hgb_r2": 0.8065,
+      "advectsr_r2": 0.824,
+      "advectsr_rmse": 17.535
+    },
+    {
+      "season_key": "post_monsoon",
+      "season_name": "Post-monsoon",
+      "idw_r2": 0.636,
+      "linear_r2": 0.438,
+      "rf_r2": 0.715,
+      "restabnet_r2": 0.814,
+      "hgb_r2": 0.7365,
+      "advectsr_r2": 0.7627,
+      "advectsr_rmse": 36.738
+    }
+  ],
+  "feature_importance": [
+    {
+      "feature": "aod",
+      "label": "AOD (550nm Aerosol Depth)",
+      "importance": 0.305
+    },
+    {
+      "feature": "sp",
+      "label": "Surface Pressure (sp)",
+      "importance": 0.193
+    },
+    {
+      "feature": "t2m",
+      "label": "2m Air Temperature (t2m)",
+      "importance": 0.137
+    },
+    {
+      "feature": "d2m",
+      "label": "2m Dewpoint Temp (d2m)",
+      "importance": 0.102
+    },
+    {
+      "feature": "lat",
+      "label": "Latitude (\u00b0N)",
+      "importance": 0.088
+    },
+    {
+      "feature": "lon",
+      "label": "Longitude (\u00b0E)",
+      "importance": 0.079
+    },
+    {
+      "feature": "u10",
+      "label": "10m Zonal Wind (u10)",
+      "importance": 0.037
+    },
+    {
+      "feature": "month",
+      "label": "Seasonal Month",
+      "importance": 0.029
+    },
+    {
+      "feature": "v10",
+      "label": "10m Meridional Wind (v10)",
+      "importance": 0.029
+    }
+  ],
+  "split_summary": [
+    {
+      "region": "central",
+      "test": 42,
+      "train": 108,
+      "test_share": 0.28
+    },
+    {
+      "region": "himalaya",
+      "test": 9,
+      "train": 28,
+      "test_share": 0.24
+    },
+    {
+      "region": "igp",
+      "test": 22,
+      "train": 62,
+      "test_share": 0.26
+    },
+    {
+      "region": "northeast",
+      "test": 7,
+      "train": 36,
+      "test_share": 0.16
+    },
+    {
+      "region": "northwest",
+      "test": 10,
+      "train": 73,
+      "test_share": 0.12
+    },
+    {
+      "region": "south",
+      "test": 22,
+      "train": 75,
+      "test_share": 0.23
+    }
+  ],
+  "tail_and_moran": {
+    "Linear Regression": {
+      "overall_r2": 0.4605,
+      "overall_rmse": 46.12,
+      "overall_mae": 31.15,
+      "overall_bias": -11.68,
+      "tail_rmse": 106.21,
+      "tail_mae": 83.51,
+      "tail_bias": -77.91,
+      "severe_precision": 0.665,
+      "severe_recall": 0.368,
+      "severe_f1": 0.474,
+      "morans_i": 0.6052
+    },
+    "Random Forest": {
+      "overall_r2": 0.7421,
+      "overall_rmse": 31.89,
+      "overall_mae": 17.83,
+      "overall_bias": -5.55,
+      "tail_rmse": 79.55,
+      "tail_mae": 58.39,
+      "tail_bias": -28.86,
+      "severe_precision": 0.81,
+      "severe_recall": 0.664,
+      "severe_f1": 0.73,
+      "morans_i": 0.4374
+    },
+    "HistGradientBoosting": {
+      "overall_r2": 0.7541,
+      "overall_rmse": 31.14,
+      "overall_mae": 17.55,
+      "overall_bias": -4.96,
+      "tail_rmse": 77.85,
+      "tail_mae": 55.1,
+      "tail_bias": -31.49,
+      "severe_precision": 0.806,
+      "severe_recall": 0.693,
+      "severe_f1": 0.745,
+      "morans_i": 0.3288
+    },
+    "AdvectSR-PM (PIML)": {
+      "overall_r2": 0.7765,
+      "overall_rmse": 29.68,
+      "overall_mae": 16.56,
+      "overall_bias": -3.62,
+      "tail_rmse": 74.07,
+      "tail_mae": 51.02,
+      "tail_bias": -26.44,
+      "severe_precision": 0.81,
+      "severe_recall": 0.727,
+      "severe_f1": 0.766,
+      "morans_i": 0.2944
+    },
+    "ResTabNet (Deep Tabular)": {
+      "overall_r2": 0.8274,
+      "overall_rmse": 26.09,
+      "overall_mae": 14.85,
+      "overall_bias": -5.21,
+      "tail_rmse": 63.31,
+      "tail_mae": 43.36,
+      "tail_bias": -22.09,
+      "severe_precision": 0.839,
+      "severe_recall": 0.77,
+      "severe_f1": 0.803,
+      "morans_i": 0.284
+    },
+    "Advect-ResTabNet (Hybrid)": {
+      "overall_r2": 0.8253,
+      "overall_rmse": 26.25,
+      "overall_mae": 14.7,
+      "overall_bias": -4.81,
+      "tail_rmse": 64.66,
+      "tail_mae": 43.89,
+      "tail_bias": -23.18,
+      "severe_precision": 0.838,
+      "severe_recall": 0.769,
+      "severe_f1": 0.802,
+      "morans_i": 0.2922
+    }
+  }
+}

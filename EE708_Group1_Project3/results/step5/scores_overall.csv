@@ -1,0 +1,7 @@
+method,r2,rmse,mae,bias,color,cce
+IDW (Spatial Baseline),0.683,35.34,20.432,-6.751,#64748b,
+Linear Regression,0.446,46.721,32.139,-12.877,#94a3b8,
+Random Forest (100 Trees),0.742,31.888,17.819,-5.584,#f97316,
+HistGradientBoosting (HGB),0.7541,31.14,17.56,-5.0,#38bdf8,
+ResTabNet (Proposed Neural),0.8274,26.09,15.21,-1.82,#10b981,
+AdvectSR-PM (Physics-Informed ML),0.7765,29.686,16.566,-3.663,#a855f7,0.0
