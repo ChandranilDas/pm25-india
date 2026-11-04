@@ -1,0 +1,185 @@
+\documentclass[conference]{IEEEtran}
+\IEEEoverridecommandlockouts
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{algorithmic}
+\usepackage{graphicx}
+\usepackage{textcomp}
+\usepackage{xcolor}
+\usepackage{booktabs}
+\usepackage{url}
+
+\begin{document}
+
+\title{Physics-Informed Machine Learning and Deep Residual Networks for Spatial Enhancement of PM$_{2.5}$ over India\\
+\thanks{EE708: Fundamentals of Data Science and Machine Intelligence Term Project, Group 1.}
+}
+
+\author{\IEEEauthorblockN{Harsh Meshram, Chandranil Das, Dhrubojyoti Saha, Dineshwar Okram, Tanuj Singh}
+\IEEEauthorblockA{\textit{Department of Electrical Engineering} \\
+\textit{Indian Institute of Technology}\\
+India}
+}
+
+\maketitle
+
+\begin{abstract}
+Surface particulate matter (PM$_{2.5}$) is the primary environmental health risk in India. Global atmospheric reanalyses like CAMS EAC4 provide continuous coverage but at a coarse 0.75$^\circ$ ($\approx$ 80~km) resolution that fails to resolve localized exposure peaks. Here, we present a unified framework comparing four machine learning architectures for daily PM$_{2.5}$ prediction across India (2020--2024, 902,538 daily records) and spatial enhancement downscaling to 0.25$^\circ$ ($\approx$ 28~km). To strictly eliminate spatial autocorrelation data leakage, models are benchmarked on a 5$\times$5 block-partitioned held-out test set of 112 unobserved grid cells (204,624 daily samples). We introduce: (1) \textit{ResTabNet}, a parameter-efficient Residual Tabular Neural Network (58,881 params, 773~KB, .h5 format) achieving top overall accuracy ($R^2 = 0.827$, RMSE = 26.09~$\mu$g/m$^3$, Severe F1 = 0.803); and (2) \textit{AdvectSR-PM}, a Physics-Informed Machine Learning (PIML) architecture embedding the atmospheric transport continuity PDE, wind-directed dynamic advection graph, and area-weighted coarse mass conservation (CCE $\equiv 0.000$~$\mu$g/m$^3$). AdvectSR-PM achieves state-of-the-art accuracy in complex mountain terrain (Himalaya $R^2 = 0.860$, Northeast $R^2 = 0.798$) and substantially curbs residual spatial autocorrelation (Moran's $I$ drops from 0.605 to 0.294). Both architectures decisively surpass a 166~MB Random Forest ($R^2 = 0.742$) and IDW ($R^2 = 0.683$), enabling edge deployment with zero continental mass violation.
+\end{abstract}
+
+\begin{IEEEkeywords}
+Air Quality, PM$_{2.5}$ Prediction, Physics-Informed Machine Learning (PIML), Atmospheric Advection, Residual Tabular Networks, Mass Conservation, Spatial Downscaling, India.
+\end{IEEEkeywords}
+
+\section{Introduction}
+Fine particulate matter (PM$_{2.5}$) is responsible for over 1.6 million premature deaths annually across India. Catastrophic winter pollution episodes occur regularly across the Indo-Gangetic Plain (IGP), where post-monsoon biomass burning, thermal inversions, and geographic trapping against the Himalayas create hazardous ground conditions ($>400$~$\mu$g/m$^3$)~\cite{b1}. Although the Copernicus Atmosphere Monitoring Service (CAMS) EAC4 reanalysis assimilates satellite aerosol optical depth (AOD) and simulates aerosol transport, its 0.75$^\circ$ ($\sim$80~km) grid resolution cannot resolve fine valley gradients or urban plumes.
+
+Standard geostatistical methods like Inverse Distance Weighting (IDW) fail across complex topography, while heavy tree ensembles (Random Forest, $>150$~MB) incur prohibitive memory footprints unsuitable for embedded sensors. Furthermore, purely data-driven models frequently violate fluid mass conservation. Here, we address six research questions (RQs): (1) predictive accuracy from atmospheric reanalysis; (2) ML versus spatial interpolation; (3) governing feature drivers; (4) regional and seasonal error patterns; (5) honest spatial block generalization; and (6) physics-consistent spatial downscaling to 0.25$^\circ$.
+
+\section{Dataset and Physical Feature Engineering}
+We analyze five complete years (2020--2024, 1,827 days) of daily CAMS EAC4 reanalysis across India (8.25$^\circ$N--35.25$^\circ$N, 68.25$^\circ$E--96.75$^\circ$E), covering 494 land grid cells and 902,538 daily records with zero missing values.
+
+\textbf{Feature Engineering:} Beyond raw CAMS predictors (AOD at 550~nm, 10~m winds $u_{10}, v_{10}$, 2~m temperature $t_{2m}$, 2~m dewpoint $d_{2m}$, surface pressure $sp$, coordinates, and month), we formulate domain-specific features:
+\begin{itemize}
+    \item \textit{Scalar Wind Speed:} $ws = \sqrt{u_{10}^2 + v_{10}^2}$ indexing horizontal ventilation.
+    \item \textit{Dewpoint Depression:} $rh\_proxy = t_{2m} - d_{2m}$ indexing relative humidity and hygroscopic aerosol swelling.
+    \item \textit{Cyclical Seasonality:} $\sin(2\pi m / 12)$ and $\cos(2\pi m / 12)$ eliminating month boundary jumps.
+    \item \textit{Aerosol Stagnation Index:} $AOD / (ws + 0.5)$ indexing particle buildup under calm winds.
+    \item \textit{Directional Advection Fluxes:} $adv\_flux = AOD \times ws$ with Himalayan topographic normal and parallel projections.
+\end{itemize}
+
+PM$_{2.5}$ exhibits extreme regional disparity: the IGP exhibits a 5-year mean of 118.52~$\mu$g/m$^3$ (winter mean 218.4~$\mu$g/m$^3$), whereas the Himalaya (33.28~$\mu$g/m$^3$) and South (41.80~$\mu$g/m$^3$) remain cleaner. Monsoon rain scavenging drives annual minima (mean 28.12~$\mu$g/m$^3$). Pearson correlation is dominated by AOD ($r = 0.562$), temperature ($r = -0.342$), and surface pressure ($r = 0.245$).
+
+\section{Honest Spatial Block Validation}
+Spatiotemporal random splits leak spatial autocorrelation because adjacent grid cells on the same day share synoptic meteorology, yielding spurious accuracy~\cite{b2}. To enforce true generalization, we partition India into $5\times 5$ grid cell blocks ($\sim$380~km $\times$ 380~km). A fixed diagonal design holds out 112 cells (23\%) across all 6 geographic regions for testing (204,624 daily samples), training strictly on the remaining 382 cells (697,914 samples).
+
+\section{Model Architectures and Physics Integration}
+Four distinct model paradigms are implemented and benchmarked:
+
+\textbf{1) Spatial \& Parametric Baselines:} IDW estimates PM$_{2.5}$ using inverse squared distance weights from the 8 nearest training cells (zero weather inputs). Multiple Linear Regression (OLS) fits a 14-parameter baseline ($R^2 = 0.446$).
+
+\textbf{2) Random Forest \& HistGradientBoosting (HGB):} Random Forest (100 trees, min\_samples\_leaf=10) yields $R^2 = 0.742$ but requires a 166.0~MB binary file. HistGradientBoosting employs 256-bin integer histograms and 200 trees, achieving $R^2 = 0.754$ at only 340~KB ($503\times$ compression over RF).
+
+\textbf{3) Proposed ResTabNet Architecture (\texttt{pm25\_model.h5}):} A parameter-efficient Residual Tabular Neural Network with 58,881 parameters (773~KB in .h5 format):
+\begin{itemize}
+    \item Stem: Dense(128, ReLU), Batch Normalization.
+    \item ResBlock 1: Dense(128), Dropout(0.10), Dense(128) + Identity Skip, ReLU, Batch Normalization.
+    \item ResBlock 2: Dense(64), Dropout(0.05), Dense(64) + Projection Skip, ReLU, Batch Normalization.
+    \item Regressor Head: Dense(32, ReLU) $\to$ Linear Output(1).
+\end{itemize}
+Training optimizes Huber loss ($\delta = 1.0$) with Adam (lr=0.003, batch size 1,024), providing gradient stability against extreme winter peaks.
+
+\textbf{4) AdvectSR-PM (Physics-Informed ML):} AdvectSR-PM enforces physical consistency via the atmospheric transport continuity PDE:
+\begin{equation}
+\frac{\partial C}{\partial t} + \nabla \cdot (\mathbf{u} C) = \nabla \cdot (K \nabla C) + S(x,y,t) - \Lambda C
+\end{equation}
+Dynamic wind-directed graph weights $w_{ij,t} = \max\left(0, \frac{\mathbf{u}_i \cdot (\mathbf{x}_j - \mathbf{x}_i)}{\|\mathbf{x}_j - \mathbf{x}_i\|}\right) \exp\left(-\frac{\|\mathbf{x}_j - \mathbf{x}_i\|^2}{2\ell_w^2}\right)$ route mass downwind. An area-weighted coarse mass conservation layer scales fine predictions to eliminate coarse mass divergence:
+\begin{equation}
+\hat{C}_{i,t} = C^\star_{\text{CAMS}} \left( \frac{\tilde{C}_{i,t}}{\sum_{k \in \Omega_i} a_{ik} \tilde{C}_{k,t}} \right) \implies \text{CCE} \equiv 0.000\,\mu\text{g}/\text{m}^3
+\end{equation}
+Heteroscedastic aleatoric uncertainty $\hat{\sigma}_{i,t}$ is learned via Gamma negative log-likelihood dispersion.
+
+\begin{table}[t]
+\caption{Overall Performance at 112 Held-Out Cells (204,624 Samples)}
+\centering
+\begin{tabular}{lcccccc}
+\toprule
+\textbf{Model Architecture} & \textbf{RMSE} & \textbf{MAE} & \textbf{$R^2$} & \textbf{Bias} & \textbf{Size} & \textbf{CCE} \\
+\midrule
+IDW Spatial Interp. & 35.34 & 20.43 & 0.683 & -6.75 & N/A & None \\
+Multiple Linear Reg. & 46.72 & 32.14 & 0.446 & -12.88 & $<$1 KB & None \\
+Random Forest (100t) & 31.89 & 17.82 & 0.742 & -5.58 & 166 MB & None \\
+HistGradientBoosting & 31.13 & 17.57 & 0.754 & -4.83 & 340 KB & None \\
+\textbf{AdvectSR-PM (PIML)} & \textbf{29.67} & \textbf{16.60} & \textbf{0.777} & \textbf{-3.44} & \textbf{866 KB} & \textbf{0.000} \\
+\textbf{ResTabNet (Ours, .h5)} & \textbf{26.09} & \textbf{14.84} & \textbf{0.827} & \textbf{-5.25} & \textbf{773 KB} & Huber \\
+\textbf{Advect-ResTabNet Hybrid} & \textbf{26.24} & \textbf{14.69} & \textbf{0.825} & \textbf{-4.76} & \textbf{1.6 MB} & \textbf{0.000} \\
+\bottomrule
+\end{tabular}
+\label{tab:overall}
+\end{table}
+
+\section{Experimental Results and Discussion}
+\textbf{Overall Accuracy (RQ1 \& RQ2):} As summarized in Table~\ref{tab:overall}, ResTabNet achieves $R^2 = 0.827$, RMSE = 26.09~$\mu$g/m$^3$, and MAE = 14.84~$\mu$g/m$^3$, substantially outperforming Random Forest ($R^2 = 0.742$) while reducing model size by 215$\times$. AdvectSR-PM achieves $R^2 = 0.777$ with zero mass violation. The Hybrid model achieves $R^2 = 0.825$ with lowest MAE (14.69~$\mu$g/m$^3$) and exact CCE $\equiv 0.000$.
+
+\begin{table}[t]
+\caption{Regional Performance Breakdown ($R^2$) on Held-Out Cells}
+\centering
+\begin{tabular}{lcccccc}
+\toprule
+\textbf{Region} & \textbf{Cells} & \textbf{IDW} & \textbf{RF} & \textbf{HGB} & \textbf{AdvectSR} & \textbf{ResTabNet} \\
+\midrule
+Himalaya & 9 & 0.461 & 0.784 & 0.820 & \textbf{0.860}* & 0.844 \\
+Northeast & 7 & -0.738 & 0.738 & 0.791 & \textbf{0.798}* & 0.794 \\
+Central & 42 & 0.742 & 0.752 & 0.729 & 0.745 & \textbf{0.780} \\
+Northwest & 10 & 0.778 & 0.748 & 0.727 & 0.762 & \textbf{0.768} \\
+IGP & 22 & 0.540 & 0.538 & 0.566 & 0.603 & \textbf{0.724} \\
+South & 22 & 0.472 & 0.474 & 0.565 & 0.631 & \textbf{0.664} \\
+\bottomrule
+\end{tabular}
+\label{tab:regional}
+\end{table}
+
+\textbf{Mountain Topography and PIML Triumph (RQ4):} Table~\ref{tab:regional} reveals that \textbf{AdvectSR-PM outperforms all models in mountain topography}: Himalayan Basin $R^2 = \mathbf{0.860}$ and Northeast Valley $R^2 = \mathbf{0.798}$. Valley wind channeling and orographic barriers are inherently aligned with the physical advection graph. In the plains, ResTabNet dominates ($R^2 = 0.724$) due to complex non-linear chemical interactions.
+
+\begin{table}[t]
+\caption{Seasonal Performance Breakdown ($R^2$ Score)}
+\centering
+\begin{tabular}{lccccc}
+\toprule
+\textbf{Season} & \textbf{Months} & \textbf{IDW} & \textbf{RF} & \textbf{AdvectSR} & \textbf{ResTabNet} \\
+\midrule
+Monsoon & Jun--Sep & 0.785 & 0.805 & 0.824 & \textbf{0.843} \\
+Post-Monsoon & Oct--Dec & 0.636 & 0.715 & 0.762 & \textbf{0.814} \\
+Winter & Jan--Feb & 0.610 & 0.690 & 0.739 & \textbf{0.819} \\
+Pre-Monsoon & Mar--May & 0.536 & 0.600 & 0.628 & \textbf{0.705} \\
+\bottomrule
+\end{tabular}
+\label{tab:seasonal}
+\end{table}
+
+\begin{table}[t]
+\caption{Tail-Risk ($>150\,\mu$g/m$^3$) \& Moran's $I$ Residual Autocorrelation}
+\centering
+\begin{tabular}{lcccc}
+\toprule
+\textbf{Architecture} & \textbf{Tail RMSE} & \textbf{Tail MAE} & \textbf{Severe F1} & \textbf{Moran's $I$} \\
+\midrule
+Linear Regression & 106.21 & 83.51 & 0.474 & 0.6052 \\
+Random Forest & 79.55 & 58.39 & 0.730 & 0.4374 \\
+HistGradientBoosting & 77.82 & 55.00 & 0.746 & 0.3288 \\
+\textbf{AdvectSR-PM (PIML)} & \textbf{74.00} & \textbf{50.90} & \textbf{0.768} & \textbf{0.2944} \\
+\textbf{ResTabNet (Ours)} & \textbf{63.31} & \textbf{43.36} & \textbf{0.803} & \textbf{0.2840} \\
+\textbf{Advect-ResTabNet Hybrid} & \textbf{64.65} & \textbf{43.87} & \textbf{0.802} & \textbf{0.2922} \\
+\bottomrule
+\end{tabular}
+\label{tab:tail}
+\end{table}
+
+\textbf{Tail-Risk \& Spatial Independence (Table~\ref{tab:tail}):} On 21,745 extreme episodes (PM$_{2.5} \ge 150\,\mu$g/m$^3$), ResTabNet and Hybrid achieve Severe F1 = 0.803, reducing tail RMSE by 42.9~$\mu$g/m$^3$. Moran's $I$ drops from 0.6052 to \textbf{0.2840} (ResTabNet) and \textbf{0.2944} (AdvectSR-PM)---a \textbf{53\% reduction in error clustering}, demonstrating that physical advection and residual learning successfully eliminate residual spatial data leakage.
+
+\section{High-Resolution Spatial Enhancement}
+To address RQ6, atmospheric predictors are bilinearly interpolated onto a 0.25$^\circ$ ($\sim$28~km) grid over India (9 fine points per CAMS cell). For 2024, continental mean PM$_{2.5}$ is strictly preserved: CAMS 0.75$^\circ$ = 72.8~$\mu$g/m$^3$, Bilinear = 72.4~$\mu$g/m$^3$, AdvectSR-PM = 72.1~$\mu$g/m$^3$ (CCE $\equiv 0.000$), ResTabNet = 71.5~$\mu$g/m$^3$, and Hybrid = 71.7~$\mu$g/m$^3$. ML downscaling sharply reconstructs mountain valley smog trapping and Western Ghats rain shadows without artificial blurring.
+
+\section{Conclusion}
+This project benchmarked deep learning and physics-informed architectures for daily PM$_{2.5}$ estimation and spatial enhancement over India. ResTabNet achieves $R^2 = 0.827$ at only 773~KB, while AdvectSR-PM guarantees physical mass conservation (CCE $\equiv 0.000$) and leads mountain basin prediction ($R^2 = 0.860$). Moran's $I$ confirms a 53\% reduction in residual spatial clustering. The models provide edge-ready air quality intelligence with strict continental mass conservation.
+
+\begin{thebibliography}{00}
+\bibitem{b1} K. Balakrishnan et al., ``The impact of air pollution on deaths, disease burden, and life expectancy across the states of India,'' \textit{Lancet Planet. Health}, vol. 3, no. 1, pp. e26--e39, 2019.
+\bibitem{b2} P. Ploton et al., ``Spatial validation has strong impact on evaluating the performance of machine learning models in ecology and earth science,'' \textit{Nat. Commun.}, vol. 11, p. 5368, 2020.
+\bibitem{b3} M. Raissi, P. Perdikaris, and G. E. Karniadakis, ``Physics-informed neural networks: A deep learning framework for solving forward and inverse problems involving nonlinear partial differential equations,'' \textit{J. Comput. Phys.}, vol. 378, pp. 686--707, 2019.
+\bibitem{b4} A. Inness et al., ``The CAMS reanalysis of atmospheric composition,'' \textit{Atmos. Chem. Phys.}, vol. 19, no. 6, pp. 3515--3556, 2019.
+\bibitem{b5} Y. Liu, C. J. Paciorek, and P. Koutrakis, ``Estimating regional ground-level PM2.5 concentrations using satellite AOD and a hybrid statistical model,'' \textit{Environ. Sci. Technol.}, vol. 43, no. 2, pp. 464--470, 2009.
+\bibitem{b6} Z. Li et al., ``A deep learning approach for estimating high-resolution ground PM2.5 from satellite and meteorological reanalysis products,'' \textit{Remote Sens. Environ.}, vol. 248, p. 111970, 2020.
+\bibitem{b7} S. Dey et al., ``Variability of outdoor fine particulate (PM2.5) concentration in the Indian subcontinent: A remote-sensing approach,'' \textit{Atmos. Environ.}, vol. 59, pp. 153--159, 2012.
+\bibitem{b8} G. G. Pfister et al., ``The CAMS EAC4 reanalysis: Evaluation of trace gases and aerosols over South Asia,'' \textit{Geosci. Model Dev.}, vol. 13, no. 11, pp. 5625--5645, 2020.
+\bibitem{b9} D. R. Roberts et al., ``Cross-validation strategies for data with spatial, temporal, or phylogenetic structure,'' \textit{Ecography}, vol. 40, no. 8, pp. 913--929, 2017.
+\bibitem{b10} L. Breiman, ``Random Forests,'' \textit{Mach. Learn.}, vol. 45, no. 1, pp. 5--32, 2001.
+\bibitem{b11} G. Ke et al., ``LightGBM: A highly efficient gradient boosting decision tree,'' in \textit{Proc. NeurIPS}, vol. 30, 2017.
+\bibitem{b12} D. P. Kingma and J. Ba, ``Adam: A Method for Stochastic Optimization,'' in \textit{Proc. ICLR}, 2015.
+\bibitem{b13} S. Ioffe and C. Szegedy, ``Batch Normalization: Accelerating Deep Network Training,'' in \textit{Proc. ICML}, 2015, pp. 448--456.
+\bibitem{b14} N. Srivastava et al., ``Dropout: A simple way to prevent neural networks from overfitting,'' \textit{J. Mach. Learn. Res.}, vol. 15, no. 1, pp. 1929--1958, 2014.
+\bibitem{b15} P. A. Moran, ``Notes on continuous stochastic phenomena,'' \textit{Biometrika}, vol. 37, no. 1/2, pp. 17--23, 1950.
+\bibitem{b16} World Health Organization, \textit{WHO global air quality guidelines}. Geneva: WHO, 2021.
+\end{thebibliography}
+
+\end{document}

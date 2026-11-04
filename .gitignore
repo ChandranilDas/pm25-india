@@ -1,5 +1,22 @@
-# data and the saved model are too big for git
+# Data and raw large datasets (>100MB exceeds GitHub limits)
 data/
+EE708_Group1_Project3/data/
+EE708_Group1_Project3/Model.h5
 results/step4/random_forest.joblib
+results/step4/test_predictions.csv
+results/step4/nn_test_predictions.csv
+*.nc
+
+# Python Virtual Environments & Packages
+.venv/
+venv/
 __pycache__/
+*.pyc
 .DS_Store
+
+# IDE configs
+.vscode/
+.idea/
+
+# Vercel deployment artifacts
+.vercel/

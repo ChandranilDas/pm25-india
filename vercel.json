@@ -1,0 +1,15 @@
+{
+  "version": 2,
+  "name": "pm25-india-piml-super-resolution",
+  "cleanUrls": true,
+  "routes": [
+    {
+      "src": "/results/(.*)",
+      "dest": "/results/$1"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/index.html"
+    }
+  ]
+}
