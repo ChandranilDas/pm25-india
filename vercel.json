@@ -1,12 +1,26 @@
 {
+  "$schema": "https://openapi.vercel.sh/vercel.json",
   "version": 2,
-  "name": "pm25-india",
-  "cleanUrls": true,
+  "framework": null,
+  "buildCommand": "echo 'Static assets ready'",
   "outputDirectory": ".",
+  "cleanUrls": true,
   "routes": [
+    {
+      "src": "/api(.*)",
+      "dest": "/api/index.py"
+    },
     {
       "src": "/results/(.*)",
       "dest": "/results/$1"
+    },
+    {
+      "src": "/Report.pdf",
+      "dest": "/Report.pdf"
+    },
+    {
+      "src": "/presentation_5slides.pptx",
+      "dest": "/presentation_5slides.pptx"
     },
     {
       "src": "/(.*)",
