@@ -22,3 +22,4 @@ class handler(BaseHTTPRequestHandler):
             "dashboard_url": "/"
         }
         self.wfile.write(json.dumps(response_data, indent=2).encode('utf-8'))
+

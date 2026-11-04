@@ -2,29 +2,17 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "version": 2,
   "framework": null,
-  "buildCommand": "echo 'Static assets ready'",
-  "outputDirectory": ".",
+  "buildCommand": "node build.js",
+  "outputDirectory": "public",
   "cleanUrls": true,
-  "routes": [
+  "rewrites": [
     {
-      "src": "/api(.*)",
-      "dest": "/api/index.py"
+      "source": "/api(.*)",
+      "destination": "/api/index.py"
     },
     {
-      "src": "/results/(.*)",
-      "dest": "/results/$1"
-    },
-    {
-      "src": "/Report.pdf",
-      "dest": "/Report.pdf"
-    },
-    {
-      "src": "/presentation_5slides.pptx",
-      "dest": "/presentation_5slides.pptx"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/index.html"
+      "source": "/(.*)",
+      "destination": "/index.html"
     }
   ]
 }

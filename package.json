@@ -4,6 +4,6 @@
   "private": true,
   "description": "Spatial Super-Resolution PM2.5 Prediction Platform for India",
   "scripts": {
-    "build": "echo 'Static assets ready'"
+    "build": "node build.js"
   }
 }
