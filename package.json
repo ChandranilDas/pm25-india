@@ -2,8 +2,5 @@
   "name": "pm25-india",
   "version": "1.0.0",
   "private": true,
-  "description": "Spatial Super-Resolution PM2.5 Prediction Platform for India",
-  "scripts": {
-    "build": "node build.js"
-  }
+  "description": "Spatial Super-Resolution PM2.5 Prediction Platform for India"
 }
