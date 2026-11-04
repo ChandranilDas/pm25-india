@@ -1,7 +1,8 @@
 {
   "version": 2,
-  "name": "pm25-india-piml-super-resolution",
+  "name": "pm25-india",
   "cleanUrls": true,
+  "outputDirectory": ".",
   "routes": [
     {
       "src": "/results/(.*)",

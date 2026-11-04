@@ -66,7 +66,7 @@ The web interface is available at `index.html` (or `web_dashboard.html`), featur
 ### 1. Launch the Live Web Studio:
 ```bash
 # Start backend daemon
-python app.py
+python local_server.py
 # Open in browser: http://localhost:8080
 ```
 
@@ -97,7 +97,7 @@ vercel --prod
 ├── index.html                   # Vercel entrypoint (Prism/Leaflet full dashboard)
 ├── web_dashboard.html           # Standalone interactive explorer
 ├── vercel.json                  # Vercel deployment routes & configuration
-├── app.py                       # Python HTTP server backend & inference API
+├── local_server.py              # Python HTTP server backend & inference API
 ├── evaluate.py                  # Standalone multi-architecture evaluation pipeline
 ├── rf_worker.py                 # Multi-model IPC inference worker (RF, HGB, AdvectSR)
 ├── pm25_model.h5                # Trained ResTabNet neural network (58k params, 773 KB)
