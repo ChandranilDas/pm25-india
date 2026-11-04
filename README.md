@@ -1,10 +1,12 @@
 # Spatial Enhancement of Daily PM2.5 over India: Physics-Informed Machine Learning & Deep Residual Tabular Networks
 
-[![Vercel Deployment](https://img.shields.io/badge/Vercel-Deployed-black?logo=vercel&style=flat-square)](https://vercel.com)
+[![Live Demo](https://img.shields.io/badge/Live%20Platform-pm25--india.vercel.app-0070F3?logo=vercel&style=flat-square)](https://pm25-india.vercel.app)
 [![IEEE Paper](https://img.shields.io/badge/IEEE%20Format-Report.pdf-blue?style=flat-square)](Report.pdf)
 [![Presentation Slides](https://img.shields.io/badge/Presentation-5%20Slides-orange?style=flat-square)](presentation_5slides.pptx)
-[![Interactive Dashboard](https://img.shields.io/badge/Live%20Studio-web__dashboard.html-emerald?style=flat-square)](web_dashboard.html)
+[![Interactive Dashboard](https://img.shields.io/badge/Live%20Studio-Web%20Dashboard-emerald?style=flat-square)](https://pm25-india.vercel.app)
 [![License: MIT](https://img.shields.io/badge/License-MIT-purple?style=flat-square)](LICENSE)
+
+> 🌐 **Live Web Application**: Access the full interactive platform, Leaflet GIS, real-time Open-Meteo weather inference, and multi-model benchmark predictions at **[https://pm25-india.vercel.app](https://pm25-india.vercel.app)**.
 
 **EE708: Fundamentals of Data Science and Machine Intelligence Term Project (Group 1 • Project 3)**
 
